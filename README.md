@@ -2,6 +2,10 @@
 
 The official JavaScript Client for Utho Cloud API. This SDK provides a simple and modular way to interact with Utho's cloud services, including Cloud Servers, VPCs, Kubernetes, Object Storage, and more.
 
+## Documentation Site
+
+A premium static documentation site is available in the `docs/` folder. Open `docs/index.html` in your browser to view it.
+
 ## Features
 
 - **Modular Design**: Services are loaded lazily to ensure a small memory footprint and fast startup.
