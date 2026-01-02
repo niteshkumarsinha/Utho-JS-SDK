@@ -1,126 +1,211 @@
 # Utho JavaScript SDK
 
-The official JavaScript Client for Utho Cloud API. This SDK provides a simple and modular way to interact with Utho's cloud services, including Cloud Servers, VPCs, Kubernetes, Object Storage, and more.
+The official JavaScript Client for Utho Cloud API. This SDK provides a simple and modular way to interact with Utho's cloud services with 100% REST API parity.
 
-## Documentation Site
+## 🚀 Features
 
-A premium static documentation site is available in the `docs/` folder. Open `docs/index.html` in your browser to view it.
-
-## Features
-
+- **100% API Coverage**: Supports all 27+ Utho services including Cloud Servers, VPCs, Kubernetes, and more.
 - **Modular Design**: Services are loaded lazily to ensure a small memory footprint and fast startup.
-- **Promise-based**: All methods return Promises, making it easy to use with `async/await`.
-- **Comprehensive Coverage**: Supports over 15+ Utho services.
-- **Lightweight**: Minimal dependencies, built on top of the reliable `axios` library.
+- **Promise-based**: Built for modern `async/await` workflows.
+- **Lightweight**: Minimal dependencies, powered by the reliable `axios` library.
 
-## Installation
+---
+
+## 📦 Installation
+
+Install via npm:
 
 ```bash
 npm install utho-sdk-js
 ```
 
-## Getting Started
+Or via yarn:
 
-To use the Utho SDK, you need an API Key. You can generate one from the [Utho Console](https://console.utho.com/).
+```bash
+yarn add utho-sdk-js
+```
 
-### Basic Usage
+---
+
+## 🔑 Authentication
+
+To use the SDK, you need an API Key. Generate one from the [Utho Console](https://console.utho.com/api-keys).
 
 ```javascript
 const Utho = require('utho-sdk-js');
 
-// Initialize the SDK with your API Key
+// Initialize the SDK
 const utho = new Utho('YOUR_API_KEY');
-
-async function getAccountInfo() {
-  try {
-    const info = await utho.account.getInfo();
-    console.log('Account Info:', info);
-  } catch (error) {
-    console.error('API Error:', error.message);
-  }
-}
-
-getAccountInfo();
 ```
-
-## Error Handling
-
-The SDK throws errors when the API returns a non-2xx status code or if there are network issues. You should wrap your calls in `try/catch` blocks.
-
-```javascript
-try {
-  const servers = await utho.cloudserver.list();
-} catch (error) {
-  if (error.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
-    console.error('Data:', error.response.data);
-    console.error('Status:', error.response.status);
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    console.error('Error:', error.message);
-  }
-}
-```
-
-## Documentation
-
-The SDK is organized into services. Each service is accessible as a property of the main `Utho` instance.
-
-| Service | Description | Examples |
-| :--- | :--- | :--- |
-| `account` | Manage your Utho account profile and billing. | [account.js](./examples/account.js) |
-| `cloudserver` | List, create, and manage cloud servers. | [cloudserver.js](./examples/cloudserver.js) |
-| `vpc` | Private networking and VPC management. | [vpc.js](./examples/vpc.js) |
-| `database` | Managed Database clusters (MySQL, PostgreSQL, etc.). | [database.js](./examples/database.js) |
-| `kubernetes` | Managed Kubernetes clusters (UK8s). | [kubernetes.js](./examples/kubernetes.js) |
-| `objectstorage` | S3-compatible object storage buckets. | [objectstorage.js](./examples/objectstorage.js) |
-| `loadbalancer` | High-availability load balancers. | [loadbalancer.js](./examples/loadbalancer.js) |
-| `security` | Manage SSH keys and API keys. | [security.js](./examples/security.js) |
-| `snapshots` | Create and manage server snapshots. | [snapshots.js](./examples/snapshots.js) |
-| `sqs` | Simple Queue Service for message decoupling. | [sqs.js](./examples/sqs.js) |
-| `ssl` | Manage SSL certificates. | [ssl.js](./examples/ssl.js) |
-| `networking` | Manage DNS, IPs, and Firewalls. | [networking.js](./examples/networking.js) |
-| `monitoring` | Access server metrics and alert policies. | [monitoring.js](./examples/monitoring.js) |
 
 ---
 
-### Cloud Server Usage
+## 📚 Service Reference & Examples
 
+The SDK is organized into modular services. Each service is accessible as a property of the main `Utho` instance.
+
+### 💻 Compute & Orchestration
+
+#### Cloud Server
+Deploy and manage virtual machines.
 ```javascript
-// List all cloud servers
+// List servers
 const servers = await utho.cloudserver.list();
 
-// Deploy a cloud server
+// Deploy server
 const newServer = await utho.cloudserver.deploy({
     dcslug: 'in-mumbai-1',
     planid: '1',
     imageid: '1',
-    hostname: 'my-server'
+    hostname: 'prod-web-01'
 });
 
-// Power actions (poweron, poweroff, reboot)
-await utho.cloudserver.control('in-mumbai-1', 'cloud-id', 'reboot');
+// Power control (poweron, poweroff, hardreboot, powercycle)
+await utho.cloudserver.control('server-id', 'poweron');
 ```
 
-### Managed Database
+#### Autoscaling
+Automatically scale your capacity.
+```javascript
+const groups = await utho.autoscaling.list();
+await utho.autoscaling.create({ name: 'web-asg', min_size: 2, max_size: 10 });
+```
+
+#### Stacks
+Infrastructure as code / Blueprints.
+```javascript
+const stacks = await utho.stacks.list();
+```
+
+#### Snapshots & Backups
+```javascript
+// Snapshots
+await utho.snapshots.list();
+await utho.cloudserver.createSnapshot('server-id');
+
+// Automated Backups
+await utho.backups.list();
+await utho.cloudserver.enableBackup('server-id');
+```
+
+---
+
+### 🌐 Networking & Security
+
+#### VPC (Virtual Private Cloud)
+```javascript
+const vpcs = await utho.vpc.list();
+const subnets = await utho.vpc.listSubnets();
+const eips = await utho.vpc.listElasticIPs();
+```
+
+#### Load Balancer & Target Groups
+```javascript
+const lbs = await utho.loadbalancer.list();
+const targetGroups = await utho.targetgroup.list();
+
+// Add Frontend to LB
+await utho.loadbalancer.addFrontend('lb-id', { port: 443, protocol: 'https' });
+```
+
+#### Networking (DNS & Firewalls)
+```javascript
+// DNS
+const domains = await utho.networking.listDomains();
+await utho.networking.addDNSRecord('example.com', { type: 'A', value: '1.2.3.4' });
+
+// Firewall
+const firewalls = await utho.networking.listFirewalls();
+await utho.networking.addFirewallRule('fw-id', { protocol: 'tcp', port: '80' });
+```
+
+#### WAF & IpSec
+```javascript
+const wafs = await utho.waf.list();
+const vpns = await utho.ipsec.list();
+```
+
+---
+
+### 🗄️ Database & Storage
+
+#### Managed Database
+```javascript
+const dbs = await utho.database.list();
+// Add a database to a cluster
+await utho.database.addDatabase('cluster-id', { dbname: 'app_db' });
+```
+
+#### Object Storage & EBS
+```javascript
+// S3 Compatible Buckets
+const buckets = await utho.objectstorage.listBuckets('in-mumbai-1');
+
+// Block Storage (EBS)
+const volumes = await utho.storage.list();
+await utho.storage.attach('vol-id', { serverid: 'server-id' });
+```
+
+---
+
+### 🛠️ Platform & Tools
+
+#### Kubernetes (UK8s)
+```javascript
+const clusters = await utho.kubernetes.list();
+const kubeconfig = await utho.kubernetes.download('cluster-id');
+```
+
+#### Registry, SQS & SSL
+```javascript
+await utho.registry.list();
+await utho.sqs.list();
+await utho.ssl.list();
+```
+
+---
+
+### 👤 Account & Administration
+
+#### Account & Sub-Users
+```javascript
+const info = await utho.account.getInfo();
+const staff = await utho.subuser.list();
+```
+
+#### Activity & Actions
+```javascript
+const logs = await utho.activity.list();
+const actions = await utho.actions.list();
+```
+
+---
+
+## 🚨 Error Handling
+
+The SDK uses standard Promise rejection for errors. You should use `try/catch` blocks.
 
 ```javascript
-// List databases
-const dbs = await utho.database.list();
-
-// Create a database cluster
-const newDb = await utho.database.create({
-    name: 'prod-db',
-    engine: 'mysql',
-    dcslug: 'in-mumbai-1'
-});
+try {
+    const result = await utho.cloudserver.list();
+} catch (error) {
+    console.error('API Error:', error.message);
+    if (error.response) {
+        console.error('Response Data:', error.response.data);
+    }
+}
 ```
 
-## Contributing
+---
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## 📄 Documentation
 
-## License
+Full interactive documentation is available in the `docs/` folder. Open `docs/index.html` in your browser.
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for more details.
+
+## ⚖️ License
 
 MIT © [Utho](https://utho.com)

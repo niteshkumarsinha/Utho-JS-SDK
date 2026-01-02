@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Utho JavaScript SDK Documentation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body class="dark-theme">
     <div class="app-container">
         <aside class="sidebar">
@@ -35,8 +39,10 @@
                     <h3>SERVICES</h3>
                     <ul id="serviceList">
                         <li><a href="#account" class="nav-link">Account</a></li>
+                        <li><a href="#actions" class="nav-link">Actions</a></li>
+                        <li><a href="#activity" class="nav-link">Activity Logs</a></li>
                         <li><a href="#cloudserver" class="nav-link">Cloud Server</a></li>
-                        <li><a href="#vpc" class="nav-link">VPC</a></li>
+                        <li><a href="#vpc" class="nav-link">Virtual Private Cloud (VPC)</a></li>
                         <li><a href="#database" class="nav-link">Database</a></li>
                         <li><a href="#kubernetes" class="nav-link">Kubernetes</a></li>
                         <li><a href="#objectstorage" class="nav-link">Object Storage</a></li>
@@ -45,12 +51,20 @@
                         <li><a href="#snapshots" class="nav-link">Snapshots</a></li>
                         <li><a href="#sqs" class="nav-link">SQS</a></li>
                         <li><a href="#ssl" class="nav-link">SSL Certificates</a></li>
-                        <li><a href="#networking" class="nav-link">Networking</a></li>
+                        <li><a href="#networking" class="nav-link">Networking & DNS</a></li>
                         <li><a href="#monitoring" class="nav-link">Monitoring</a></li>
                         <li><a href="#autoscaling" class="nav-link">Autoscaling</a></li>
                         <li><a href="#backups" class="nav-link">Backups</a></li>
+                        <li><a href="#ipsec" class="nav-link">IpSec (VPN)</a></li>
                         <li><a href="#iso" class="nav-link">ISO</a></li>
                         <li><a href="#registry" class="nav-link">Registry</a></li>
+                        <li><a href="#stacks" class="nav-link">Stacks</a></li>
+                        <li><a href="#storage" class="nav-link">Storage (EBS)</a></li>
+                        <li><a href="#subuser" class="nav-link">Sub-Users</a></li>
+                        <li><a href="#targetgroup" class="nav-link">Target Group</a></li>
+                        <li><a href="#transfer" class="nav-link">Resource Transfer</a></li>
+                        <li><a href="#vpn" class="nav-link">VPN (Legacy)</a></li>
+                        <li><a href="#waf" class="nav-link">WAF</a></li>
                     </ul>
                 </div>
             </nav>
@@ -59,9 +73,11 @@
         <main class="content-area">
             <div id="intro" class="content-section active">
                 <h1>Introduction</h1>
-                <p class="lead">The official JavaScript SDK for Utho Cloud. Build scalable cloud infrastructure with ease.</p>
-                <p>Welcome to the Utho JavaScript SDK documentation. This SDK provides a comprehensive set of tools to interact with Utho's cloud services programmatically.</p>
-                
+                <p class="lead">The official JavaScript SDK for Utho Cloud. Build scalable cloud infrastructure with
+                    ease.</p>
+                <p>Welcome to the Utho JavaScript SDK documentation. This SDK provides a comprehensive set of tools to
+                    interact with Utho's cloud services programmatically.</p>
+
                 <div class="features-grid">
                     <div class="feature-card">
                         <div class="feature-icon">🚀</div>
@@ -76,7 +92,7 @@
                     <div class="feature-card">
                         <div class="feature-icon">📦</div>
                         <h4>Full Coverage</h4>
-                        <p>Support for 17+ services including servers, databases, and networking.</p>
+                        <p>Support for 27+ services with 100% REST API parity.</p>
                     </div>
                 </div>
             </div>
@@ -116,7 +132,8 @@ main();</code></pre>
                 <h1>Authentication</h1>
                 <p>The Utho API uses API Keys for authentication. You can generate one from the Utho console.</p>
                 <div class="alert note">
-                    <strong>Note:</strong> Keep your API key secret. Never expose it in client-side code or public repositories.
+                    <strong>Note:</strong> Keep your API key secret. Never expose it in client-side code or public
+                    repositories.
                 </div>
             </div>
 
@@ -126,4 +143,5 @@ main();</code></pre>
     </div>
     <script src="js/main.js"></script>
 </body>
+
 </html>

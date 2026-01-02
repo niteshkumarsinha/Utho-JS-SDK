@@ -27,6 +27,33 @@ class SecurityService {
     async listAPIKeys() {
         return this.client.get('/api');
     }
+
+    /**
+     * Delete an SSH key
+     * @param {string} id - SSH key ID
+     * @returns {Promise<Object>} Deletion response
+     */
+    async deleteSSHKey(id) {
+        return this.client.delete(`/key/${id}`);
+    }
+
+    /**
+     * Generate a new API key
+     * @param {Object} data - API key generation parameters
+     * @returns {Promise<Object>} Generated API key
+     */
+    async generateAPIKey(data) {
+        return this.client.post('/api/generate', data);
+    }
+
+    /**
+     * Delete an API key
+     * @param {string} id - API key ID
+     * @returns {Promise<Object>} Deletion response
+     */
+    async deleteAPIKey(id) {
+        return this.client.delete(`/api/${id}`);
+    }
 }
 
 module.exports = SecurityService;

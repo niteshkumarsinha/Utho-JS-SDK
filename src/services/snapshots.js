@@ -1,4 +1,4 @@
-class SnapshotService {
+class SnapshotsService {
     constructor(client) {
         this.client = client;
     }
@@ -17,8 +17,18 @@ class SnapshotService {
      * @returns {Promise<Object>} Creation response
      */
     async create(data) {
-        return this.client.post('/snapshots/create', data);
+        return this.client.post('/snapshots', data);
+    }
+
+    /**
+     * Delete a snapshot
+     * @param {string} cloudId - Cloud server ID
+     * @param {string} snapshotId - Snapshot ID
+     * @returns {Promise<Object>} Deletion response
+     */
+    async delete(cloudId, snapshotId) {
+        return this.client.delete(`/snapshots/${cloudId}/${snapshotId}`);
     }
 }
 
-module.exports = SnapshotService;
+module.exports = SnapshotsService;

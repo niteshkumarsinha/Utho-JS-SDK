@@ -129,8 +129,8 @@ class Utho {
 
     get snapshots() {
         if (!this._snapshots) {
-            const SnapshotService = require('./services/snapshots');
-            this._snapshots = new SnapshotService(this.client);
+            const SnapshotsService = require('./services/snapshots');
+            this._snapshots = new SnapshotsService(this.client);
         }
         return this._snapshots;
     }
@@ -145,10 +145,90 @@ class Utho {
 
     get ssl() {
         if (!this._ssl) {
-            const SSLService = require('./services/ssl');
-            this._ssl = new SSLService(this.client);
+            const SslService = require('./services/ssl');
+            this._ssl = new SslService(this.client);
         }
         return this._ssl;
+    }
+
+    get stacks() {
+        if (!this._stacks) {
+            const StacksService = require('./services/stacks');
+            this._stacks = new StacksService(this.client);
+        }
+        return this._stacks;
+    }
+
+    get storage() {
+        if (!this._storage) {
+            const StorageService = require('./services/storage');
+            this._storage = new StorageService(this.client);
+        }
+        return this._storage;
+    }
+
+    get transfer() {
+        if (!this._transfer) {
+            const TransferService = require('./services/transfer');
+            this._transfer = new TransferService(this.client);
+        }
+        return this._transfer;
+    }
+
+    get vpn() {
+        if (!this._vpn) {
+            const VpnService = require('./services/vpn');
+            this._vpn = new VpnService(this.client);
+        }
+        return this._vpn;
+    }
+
+    get waf() {
+        if (!this._waf) {
+            const WafService = require('./services/waf');
+            this._waf = new WafService(this.client);
+        }
+        return this._waf;
+    }
+
+    get actions() {
+        if (!this._actions) {
+            const ActionsService = require('./services/actions');
+            this._actions = new ActionsService(this.client);
+        }
+        return this._actions;
+    }
+
+    get activity() {
+        if (!this._activity) {
+            const ActivityService = require('./services/activity');
+            this._activity = new ActivityService(this.client);
+        }
+        return this._activity;
+    }
+
+    get subuser() {
+        if (!this._subuser) {
+            const SubUserService = require('./services/subuser');
+            this._subuser = new SubUserService(this.client);
+        }
+        return this._subuser;
+    }
+
+    get targetgroup() {
+        if (!this._targetgroup) {
+            const TargetGroupService = require('./services/targetgroup');
+            this._targetgroup = new TargetGroupService(this.client);
+        }
+        return this._targetgroup;
+    }
+
+    get ipsec() {
+        if (!this._ipsec) {
+            const IpSecService = require('./services/ipsec');
+            this._ipsec = new IpSecService(this.client);
+        }
+        return this._ipsec;
     }
 }
 
