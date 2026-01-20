@@ -6,6 +6,12 @@ name: Node.js Package
 on:
   release:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      publish_scope:
+        description: 'Package to publish (e.g., @utho/sdk-core) or "all" to publish everything'
+        required: true
+        default: 'all'
 
 jobs:
   build:
@@ -15,8 +21,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm ci
-      - run: npm test
+      - run: npm install
+      - run: npm test --if-present
 
   publish-npm:
     needs: build
@@ -27,7 +33,18 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm publish
+      - run: npm install
+      - name: Publish Packages
+        run: |
+          if [ "${{ github.event.inputs.publish_scope || 'all' }}" == "all" ]; then
+            echo "Publishing all packages..."
+            # Publish individual packages first
+            npm publish --workspaces --if-present --access public
+            # Publish the monolithic root package
+            npm publish --if-present --access public
+          else
+            echo "Publishing specific package: ${{ github.event.inputs.publish_scope }}..."
+            npm publish -w ${{ github.event.inputs.publish_scope }} --access public
+          fi
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
