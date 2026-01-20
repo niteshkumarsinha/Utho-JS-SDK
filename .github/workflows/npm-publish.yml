@@ -11,7 +11,7 @@ on:
       publish_scope:
         description: 'Package to publish (e.g., @utho/sdk-core) or "all" to publish everything'
         required: true
-        default: 'all'
+        default: "all"
 
 jobs:
   build:
@@ -27,18 +27,25 @@ jobs:
   publish-npm:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: https://registry.npmjs.org/
+          registry-url: "https://registry.npmjs.org"
       - run: npm install
+      - name: Authenticate with NPM
+        run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
       - name: Publish Packages
         run: |
           if [ "${{ github.event.inputs.publish_scope || 'all' }}" == "all" ]; then
             echo "Publishing all packages..."
-            # Publish individual packages first
+            # Publish individual packages
             npm publish --workspaces --if-present --access public
             # Publish the monolithic root package
             npm publish --if-present --access public
@@ -46,5 +53,3 @@ jobs:
             echo "Publishing specific package: ${{ github.event.inputs.publish_scope }}..."
             npm publish -w ${{ github.event.inputs.publish_scope }} --access public
           fi
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
