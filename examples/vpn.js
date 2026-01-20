@@ -1,28 +1,51 @@
+/**
+ * VPN Example
+ * Shows both Monolithic and Modular usage patterns
+ */
+
+// --- Option 1: Monolithic Usage (using uthosdk-js) ---
 const Utho = require('../src/index');
+const utho = new Utho('YOUR_API_KEY');
 
-const apiKey = 'YOUR_API_KEY';
-const utho = new Utho(apiKey);
-
-async function vpnExample() {
+async function monolithicExample() {
     try {
-        console.log('Listing VPN Instances...');
+        console.log('--- Monolithic Usage ---');
         const vpns = await utho.vpn.list();
-        console.log('VPN Instances:', JSON.stringify(vpns, null, 2));
-
-        // Create a VPN instance
-        // const createResponse = await utho.vpn.create({
-        //     name: 'my-vpn',
-        //     dcslug: 'in-mumbai-1',
-        //     plan: 'vpn-small'
-        // });
-        // console.log('Created:', createResponse);
-
-        // Delete a VPN instance
-        // await utho.vpn.delete('vpn-id');
-
+        console.log('VPNs found:', vpns.length);
     } catch (error) {
-        console.error('Error:', error.message);
+        console.error('Monolithic error:', error.message);
     }
 }
 
-vpnExample();
+// --- Option 2: Modular Usage (Recommended) ---
+const Client = require('../packages/core/src/index');
+const VPNService = require('../packages/vpn/src/index');
+
+const client = new Client('YOUR_API_KEY');
+const vpn = new VPNService(client);
+
+async function modularExample() {
+    try {
+        console.log('\n--- Modular Usage ---');
+        const vpns = await vpn.list();
+        console.log('VPNs found:', vpns.length);
+
+        // Example: Create VPN
+        /*
+        await vpn.create({
+            name: 'my-remote-vpn',
+            dcslug: 'in-mumbai-1',
+            plan: 'small'
+        });
+        */
+    } catch (error) {
+        console.error('Modular error:', error.message);
+    }
+}
+
+async function run() {
+    await monolithicExample();
+    await modularExample();
+}
+
+run();

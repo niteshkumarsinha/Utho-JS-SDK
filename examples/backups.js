@@ -1,16 +1,42 @@
+/**
+ * Backups Example
+ * Shows both Monolithic and Modular usage patterns
+ */
+
+// --- Option 1: Monolithic Usage (using uthosdk-js) ---
 const Utho = require('../src/index');
+const utho = new Utho('YOUR_API_KEY');
 
-const apiKey = 'YOUR_API_KEY';
-const utho = new Utho(apiKey);
-
-async function backupsExample() {
+async function monolithicExample() {
     try {
-        console.log('Listing backups...');
+        console.log('--- Monolithic Usage ---');
         const backups = await utho.backups.list();
-        console.log('Backups:', JSON.stringify(backups, null, 2));
+        console.log('Backups found:', backups.length);
     } catch (error) {
-        console.error('Error:', error.message);
+        console.error('Monolithic error:', error.message);
     }
 }
 
-backupsExample();
+// --- Option 2: Modular Usage (Recommended) ---
+const Client = require('../packages/core/src/index');
+const BackupsService = require('../packages/backups/src/index');
+
+const client = new Client('YOUR_API_KEY');
+const backupsService = new BackupsService(client);
+
+async function modularExample() {
+    try {
+        console.log('\n--- Modular Usage ---');
+        const backups = await backupsService.list();
+        console.log('Backups found:', backups.length);
+    } catch (error) {
+        console.error('Modular error:', error.message);
+    }
+}
+
+async function run() {
+    await monolithicExample();
+    await modularExample();
+}
+
+run();

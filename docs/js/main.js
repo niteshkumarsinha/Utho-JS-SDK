@@ -178,13 +178,20 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'Object Storage',
             description: 'S3-compatible object storage for static files.',
             methods: [
+                { name: 'getPlans()', path: '/pricing/objectstorage', desc: 'List object storage plans.' },
                 { name: 'listBuckets(dc)', path: '/objectstorage/:dc/bucket', desc: 'List all buckets.' },
+                { name: 'getBucketDetails(dc, name)', path: '/objectstorage/:dc/bucket/:name/', desc: 'Get bucket details.' },
                 { name: 'createBucket(data)', path: '/objectstorage/bucket/create/', desc: 'Create a new bucket.' },
                 { name: 'deleteBucket(dc, name)', path: '/objectstorage/:dc/bucket/:name/delete/', desc: 'Delete a bucket.' },
+                { name: 'updateAccessPolicy(dc, bucket, policy)', path: '/objectstorage/:dc/bucket/:name/policy/:type', desc: 'Update access policy.' },
+                { name: 'updateAccessKeyPermission(dc, bucket, perm, key)', path: '/objectstorage/:dc/bucket/:name/permission/:perm/accesskey/:key/', desc: 'Update key permissions.' },
+                { name: 'getSharableUrl(dc, name)', path: '/objectstorage/:dc/bucket/:name/download', desc: 'Get sharable URL of file.' },
+                { name: 'uploadFile(dc, bucket, data)', path: '/objectstorage/:dc/bucket/:name/upload/internal', desc: 'Upload file to bucket.' },
                 { name: 'listAccessKeys(dc)', path: '/objectstorage/:dc/accesskeys/', desc: 'List access keys.' },
-                { name: 'createAccessKey(dc)', path: '/objectstorage/:dc/accesskey/create', desc: 'Generate new key.' }
+                { name: 'createAccessKey(dc, data)', path: '/objectstorage/:dc/accesskey/create', desc: 'Generate new key.' },
+                { name: 'modifyAccessKeyStatus(dc, name, data)', path: '/objectstorage/:dc/accesskey/:name/status', desc: 'Modify key status.' }
             ],
-            example: "const buckets = await utho.objectstorage.listBuckets('in-mumbai-1');"
+            example: "const buckets = await utho.objectstorage.listBuckets('in-mumbai-1');\n// Upload file\nawait utho.objectstorage.uploadFile('in-mumbai-1', 'my-bucket', { file: '...' });"
         },
         {
             id: 'registry',

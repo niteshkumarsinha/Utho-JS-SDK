@@ -1,34 +1,57 @@
+/**
+ * Networking Example
+ * Shows both Monolithic and Modular usage patterns
+ */
+
+// --- Option 1: Monolithic Usage (using uthosdk-js) ---
 const Utho = require('../src/index');
+const utho = new Utho('YOUR_API_KEY');
 
-const apiKey = 'YOUR_API_KEY';
-const utho = new Utho(apiKey);
-
-async function networkingExample() {
+async function monolithicExample() {
     try {
-        console.log('Listing DNS domains...');
+        console.log('--- Monolithic Usage ---');
         const domains = await utho.networking.listDomains();
-        console.log('Domains:', JSON.stringify(domains, null, 2));
-
-        if (domains.data && domains.data.length > 0) {
-            const domainName = domains.data[0].domain;
-            console.log(`\nListing DNS records for ${domainName}...`);
-            const domain = await utho.networking.getDomain(domainName);
-            console.log('Domain Details & Records:', JSON.stringify(domain, null, 2));
-        }
-
-        console.log('\nListing firewalls...');
-        const firewalls = await utho.networking.listFirewalls();
-        console.log('Firewalls:', JSON.stringify(firewalls, null, 2));
-
-        if (firewalls.data && firewalls.data.length > 0) {
-            const fwId = firewalls.data[0].id;
-            console.log(`\nGetting details for Firewall ${fwId}...`);
-            const firewall = await utho.networking.getFirewall(fwId);
-            console.log('Firewall Details & Rules:', JSON.stringify(firewall, null, 2));
-        }
+        console.log('Domains found:', domains.length);
     } catch (error) {
-        console.error('Error:', error.message);
+        console.error('Monolithic error:', error.message);
     }
 }
 
-networkingExample();
+// --- Option 2: Modular Usage (Recommended) ---
+const Client = require('../packages/core/src/index');
+const NetworkingService = require('../packages/networking/src/index');
+
+const client = new Client('YOUR_API_KEY');
+const networking = new NetworkingService(client);
+
+async function modularExample() {
+    try {
+        console.log('\n--- Modular Usage ---');
+
+        // 1. List Domains
+        const domains = await networking.listDomains();
+        console.log('Domains found:', domains.length);
+
+        if (domains.length > 0) {
+            const domainName = domains[0].domain;
+
+            // 2. Get Domain Details
+            const details = await networking.getDomain(domainName);
+            console.log(`Domain ${domainName} records:`, details.length);
+        }
+
+        // 3. List Firewalls
+        const firewalls = await networking.listFirewalls();
+        console.log('Firewalls found:', firewalls.length);
+
+    } catch (error) {
+        console.error('Modular error:', error.message);
+    }
+}
+
+async function run() {
+    await monolithicExample();
+    await modularExample();
+}
+
+run();

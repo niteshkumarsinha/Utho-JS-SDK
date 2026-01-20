@@ -1,28 +1,53 @@
+/**
+ * Resource Transfer Example
+ * Shows both Monolithic and Modular usage patterns
+ */
+
+// --- Option 1: Monolithic Usage (using uthosdk-js) ---
 const Utho = require('../src/index');
+const utho = new Utho('YOUR_API_KEY');
 
-const apiKey = 'YOUR_API_KEY';
-const utho = new Utho(apiKey);
-
-async function transferExample() {
+async function monolithicExample() {
     try {
-        // Initiate a resource transfer
-        // const initiateResponse = await utho.transfer.initiate('cloud', 'cloud-id');
-        // console.log('Transfer Initiated:', initiateResponse);
-        // // You'll receive a token to share with the recipient
-
-        // Receive a resource transfer
-        // const receiveResponse = await utho.transfer.receive({
-        //     id: 'resource-id',
-        //     token: 'transfer-token',
-        //     type: 'cloud'
-        // });
-        // console.log('Transfer Received:', receiveResponse);
-
-        console.log('Transfer service example - uncomment code to use');
-
+        console.log('--- Monolithic Usage ---');
+        // Initiate transfer
+        // await utho.transfer.initiate('cloud', 'server-123');
+        console.log('Transfer initiated (monolithic)');
     } catch (error) {
-        console.error('Error:', error.message);
+        console.error('Monolithic error:', error.message);
     }
 }
 
-transferExample();
+// --- Option 2: Modular Usage (Recommended) ---
+const Client = require('../packages/core/src/index');
+const TransferService = require('../packages/transfer/src/index');
+
+const client = new Client('YOUR_API_KEY');
+const transfer = new TransferService(client);
+
+async function modularExample() {
+    try {
+        console.log('\n--- Modular Usage ---');
+        // Initiate transfer
+        // await transfer.initiate('cloud', 'server-123');
+        console.log('Transfer initiated (modular)');
+
+        // Receive transfer
+        /*
+        await transfer.receive({
+            id: 'server-123',
+            token: 'xxxx-xxxx-xxxx',
+            type: 'cloud'
+        });
+        */
+    } catch (error) {
+        console.error('Modular error:', error.message);
+    }
+}
+
+async function run() {
+    await monolithicExample();
+    await modularExample();
+}
+
+run();

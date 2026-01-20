@@ -1,17 +1,42 @@
+/**
+ * Activity Example
+ * Shows both Monolithic and Modular usage patterns
+ */
+
+// --- Option 1: Monolithic Usage (using uthosdk-js) ---
 const Utho = require('../src/index');
+const utho = new Utho('YOUR_API_KEY');
 
-const apiKey = 'YOUR_API_KEY';
-const utho = new Utho(apiKey);
-
-async function activityExample() {
+async function monolithicExample() {
     try {
-        console.log('Listing Account Activity Logs...');
-        const activity = await utho.activity.list();
-        console.log('Activity Logs:', JSON.stringify(activity, null, 2));
-
+        console.log('--- Monolithic Usage ---');
+        const logs = await utho.activity.list();
+        console.log('Activity Logs:', logs.length);
     } catch (error) {
-        console.error('Error:', error.message);
+        console.error('Monolithic error:', error.message);
     }
 }
 
-activityExample();
+// --- Option 2: Modular Usage (Recommended) ---
+const Client = require('../packages/core/src/index');
+const ActivityService = require('../packages/activity/src/index');
+
+const client = new Client('YOUR_API_KEY');
+const activity = new ActivityService(client);
+
+async function modularExample() {
+    try {
+        console.log('\n--- Modular Usage ---');
+        const logs = await activity.list();
+        console.log('Activity Logs:', logs.length);
+    } catch (error) {
+        console.error('Modular error:', error.message);
+    }
+}
+
+async function run() {
+    await monolithicExample();
+    await modularExample();
+}
+
+run();

@@ -1,37 +1,57 @@
+/**
+ * Database Example
+ * Shows both Monolithic and Modular usage patterns
+ */
+
+// --- Option 1: Monolithic Usage (using uthosdk-js) ---
 const Utho = require('../src/index');
+const utho = new Utho('YOUR_API_KEY');
 
-const apiKey = 'YOUR_API_KEY';
-const utho = new Utho(apiKey);
-
-async function databaseExample() {
+async function monolithicExample() {
     try {
-        console.log('Listing databases...');
+        console.log('--- Monolithic Usage ---');
         const dbs = await utho.database.list();
-        console.log('Databases:', JSON.stringify(dbs, null, 2));
-
-        if (dbs.data && dbs.data.length > 0) {
-            const clusterId = dbs.data[0].id;
-            console.log(`\nListing databases in cluster ${clusterId}...`);
-            const databases = await utho.database.listDatabases(clusterId);
-            console.log('Databases in cluster:', JSON.stringify(databases, null, 2));
-
-            console.log(`\nListing users in cluster ${clusterId}...`);
-            const users = await utho.database.listUsers(clusterId);
-            console.log('Users in cluster:', JSON.stringify(users, null, 2));
-        }
-
-        // Create a database
-        /*
-        await utho.database.create({
-            name: 'test-db',
-            engine: 'mysql',
-            dcslug: 'in-mumbai-1'
-        });
-        */
-
+        console.log('Clusters found:', dbs.data?.length || 0);
     } catch (error) {
-        console.error('Error:', error.message);
+        console.error('Monolithic error:', error.message);
     }
 }
 
-databaseExample();
+// --- Option 2: Modular Usage (Recommended) ---
+const Client = require('../packages/core/src/index');
+const DatabaseService = require('../packages/database/src/index');
+
+const client = new Client('YOUR_API_KEY');
+const database = new DatabaseService(client);
+
+async function modularExample() {
+    try {
+        console.log('\n--- Modular Usage ---');
+
+        // 1. List Clusters
+        const clusters = await database.list();
+        console.log('Clusters found:', clusters.data?.length || 0);
+
+        if (clusters.data && clusters.data.length > 0) {
+            const clusterId = clusters.data[0].id;
+
+            // 2. List databases in cluster
+            const databases = await database.listDatabases(clusterId);
+            console.log(`Databases in cluster ${clusterId}:`, databases.length);
+
+            // 3. List users in cluster
+            const users = await database.listUsers(clusterId);
+            console.log(`Users in cluster ${clusterId}:`, users.length);
+        }
+
+    } catch (error) {
+        console.error('Modular error:', error.message);
+    }
+}
+
+async function run() {
+    await monolithicExample();
+    await modularExample();
+}
+
+run();

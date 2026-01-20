@@ -1,38 +1,53 @@
+/**
+ * VPC Example
+ * Shows both Monolithic and Modular usage patterns
+ */
+
+// --- Option 1: Monolithic Usage (using uthosdk-js) ---
 const Utho = require('../src/index');
+const utho = new Utho('YOUR_API_KEY');
 
-const apiKey = 'YOUR_API_KEY';
-const utho = new Utho(apiKey);
-
-async function vpcExample() {
+async function monolithicExample() {
     try {
-        console.log('Listing VPCs...');
+        console.log('--- Monolithic Usage ---');
         const vpcs = await utho.vpc.list();
-        console.log('VPCs:', JSON.stringify(vpcs, null, 2));
-
-        console.log('\nListing Subnets...');
-        const subnets = await utho.vpc.listSubnets();
-        console.log('Subnets:', JSON.stringify(subnets, null, 2));
-
-        console.log('\nListing Elastic IPs...');
-        const eips = await utho.vpc.listElasticIPs();
-        console.log('Elastic IPs:', JSON.stringify(eips, null, 2));
-
-        console.log('\nListing NAT Gateways...');
-        const nats = await utho.vpc.listNATGateways();
-        console.log('NAT Gateways:', JSON.stringify(nats, null, 2));
-
-        // Create a VPC
-        /*
-        const createResponse = await utho.vpc.create({
-            name: 'test-vpc',
-            dcslug: 'in-mumbai-1',
-            cidr: '10.0.0.0/16'
-        });
-        */
-
+        console.log('VPCs:', vpcs.length);
     } catch (error) {
-        console.error('Error:', error.message);
+        console.error('Monolithic error:', error.message);
     }
 }
 
-vpcExample();
+// --- Option 2: Modular Usage (Recommended) ---
+const Client = require('../packages/core/src/index');
+const VPCService = require('../packages/vpc/src/index');
+
+const client = new Client('YOUR_API_KEY');
+const vpc = new VPCService(client);
+
+async function modularExample() {
+    try {
+        console.log('\n--- Modular Usage ---');
+
+        // 1. List VPCs
+        const vpcs = await vpc.list();
+        console.log('VPCs found:', vpcs.length);
+
+        // 2. List Subnets
+        const subnets = await vpc.listSubnets();
+        console.log('Subnets found:', subnets.length);
+
+        // 3. List Elastic IPs
+        const eips = await vpc.listElasticIPs();
+        console.log('Elastic IPs found:', eips.length);
+
+    } catch (error) {
+        console.error('Modular error:', error.message);
+    }
+}
+
+async function run() {
+    await monolithicExample();
+    await modularExample();
+}
+
+run();

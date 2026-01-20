@@ -1,0 +1,11 @@
+{
+  "name": "@utho/sdk-ssl",
+  "version": "1.0.0",
+  "description": "ssl service for Utho SDK",
+  "main": "src/index.js",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@utho/sdk-core": "^1.0.0"
+  }
+}

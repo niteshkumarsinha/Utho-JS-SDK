@@ -1,0 +1,11 @@
+{
+    "name": "@utho/sdk-core",
+    "version": "1.0.0",
+    "description": "Core client for Utho SDK",
+    "main": "src/index.js",
+    "license": "ISC",
+    "type": "commonjs",
+    "dependencies": {
+        "axios": "^1.13.2"
+    }
+}

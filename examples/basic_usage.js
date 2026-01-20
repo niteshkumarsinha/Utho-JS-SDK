@@ -1,27 +1,42 @@
+/**
+ * Basic Usage Example (Alternative)
+ * Shows both Monolithic and Modular usage patterns
+ */
+
+// --- Option 1: Monolithic Usage (using uthosdk-js) ---
 const Utho = require('../src/index');
+const utho = new Utho('YOUR_API_KEY');
 
-// Replace with your actual API Key
-const apiKey = 'YOUR_SECRET_API_KEY';
-
-const utho = new Utho(apiKey);
-
-async function main() {
+async function monolithicExample() {
     try {
-        console.log('Fetching account information...');
-        const profile = await utho.account.getProfile();
-        console.log('Account Profile:', JSON.stringify(profile, null, 2));
-
-        console.log('\nListing cloud servers...');
-        const servers = await utho.cloudserver.list();
-        console.log('Cloud Servers:', JSON.stringify(servers, null, 2));
-
-        console.log('\nListing VPCs...');
+        console.log('--- Monolithic Usage ---');
         const vpcs = await utho.vpc.list();
-        console.log('VPCs:', JSON.stringify(vpcs, null, 2));
-
+        console.log('VPCs found:', vpcs.length);
     } catch (error) {
-        console.error('Error:', error.message);
+        console.error('Monolithic error:', error.message);
     }
 }
 
-main();
+// --- Option 2: Modular Usage (Recommended) ---
+const Client = require('../packages/core/src/index');
+const VPCService = require('../packages/vpc/src/index');
+
+const client = new Client('YOUR_API_KEY');
+const vpc = new VPCService(client);
+
+async function modularExample() {
+    try {
+        console.log('\n--- Modular Usage ---');
+        const list = await vpc.list();
+        console.log('VPCs found:', list.length);
+    } catch (error) {
+        console.error('Modular error:', error.message);
+    }
+}
+
+async function run() {
+    await monolithicExample();
+    await modularExample();
+}
+
+run();

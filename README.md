@@ -1,28 +1,34 @@
 # Utho JavaScript SDK
 
-The official JavaScript Client for Utho Cloud API. This SDK provides a simple and modular way to interact with Utho's cloud services with 100% REST API parity.
+The official JavaScript Client for Utho Cloud API. This SDK provides a comprehensive and modular way to interact with Utho's cloud services with 100% REST API parity. **Now fully modularized with NPM Workspaces.**
 
 ## 🚀 Features
 
+- **Multi-Package Workspace**: Install the full SDK or only specific service packages.
 - **100% API Coverage**: Supports all 27+ Utho services including Cloud Servers, VPCs, Kubernetes, and more.
+- **Enhanced Object Storage**: Full support for buckets, access keys, policies, and internal file uploads.
 - **Modular Design**: Services are loaded lazily to ensure a small memory footprint and fast startup.
 - **Promise-based**: Built for modern `async/await` workflows.
-- **Lightweight**: Minimal dependencies, powered by the reliable `axios` library.
 
 ---
 
 ## 📦 Installation
 
-Install via npm:
-
+### Monolithic Installation
+Install the full SDK with all services:
 ```bash
 npm install utho-sdk-js
 ```
 
-Or via yarn:
-
+### Modular Installation (Recommended)
+Install only the services you need to reduce your bundle size:
 ```bash
-yarn add utho-sdk-js
+# Core is required
+npm install @utho/sdk-core
+
+# Install specific services
+npm install @utho/sdk-objectstorage
+npm install @utho/sdk-cloudserver
 ```
 
 ---
@@ -36,6 +42,22 @@ const Utho = require('utho-sdk-js');
 
 // Initialize the SDK
 const utho = new Utho('YOUR_API_KEY');
+```
+
+### Modular Usage (Recommended)
+You can also use services individually for better tree-shaking and smaller bundle sizes.
+```javascript
+const Client = require('@utho/sdk-core');
+const ObjectStorageService = require('@utho/sdk-objectstorage');
+
+const client = new Client('YOUR_API_KEY');
+const objectstorage = new ObjectStorageService(client);
+
+async function main() {
+    const buckets = await objectstorage.listBuckets('in-mumbai-1');
+    console.log(buckets);
+}
+main();
 ```
 
 ---

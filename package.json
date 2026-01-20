@@ -1,16 +1,47 @@
 {
   "name": "uthosdk-js",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Utho JavaScript SDK - Modular Monorepo",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "axios": "^1.13.2"
+    "axios": "^1.13.2",
+    "@utho/sdk-account": "^1.0.0",
+    "@utho/sdk-actions": "^1.0.0",
+    "@utho/sdk-activity": "^1.0.0",
+    "@utho/sdk-autoscaling": "^1.0.0",
+    "@utho/sdk-backups": "^1.0.0",
+    "@utho/sdk-cloudserver": "^1.0.0",
+    "@utho/sdk-core": "^1.0.0",
+    "@utho/sdk-database": "^1.0.0",
+    "@utho/sdk-ipsec": "^1.0.0",
+    "@utho/sdk-iso": "^1.0.0",
+    "@utho/sdk-kubernetes": "^1.0.0",
+    "@utho/sdk-loadbalancer": "^1.0.0",
+    "@utho/sdk-monitoring": "^1.0.0",
+    "@utho/sdk-networking": "^1.0.0",
+    "@utho/sdk-objectstorage": "^1.0.0",
+    "@utho/sdk-registry": "^1.0.0",
+    "@utho/sdk-security": "^1.0.0",
+    "@utho/sdk-snapshots": "^1.0.0",
+    "@utho/sdk-sqs": "^1.0.0",
+    "@utho/sdk-ssl": "^1.0.0",
+    "@utho/sdk-stacks": "^1.0.0",
+    "@utho/sdk-storage": "^1.0.0",
+    "@utho/sdk-subuser": "^1.0.0",
+    "@utho/sdk-targetgroup": "^1.0.0",
+    "@utho/sdk-transfer": "^1.0.0",
+    "@utho/sdk-vpc": "^1.0.0",
+    "@utho/sdk-vpn": "^1.0.0",
+    "@utho/sdk-waf": "^1.0.0"
   }
 }

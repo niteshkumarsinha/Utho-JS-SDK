@@ -1,32 +1,51 @@
-const Utho = require('../src');
+/**
+ * Basic Usage Example
+ * Shows both Monolithic and Modular usage patterns
+ */
 
-// Replace with your actual API key
-const apiKey = 'YOUR_API_KEY';
+// --- Option 1: Monolithic Usage (using uthosdk-js) ---
+const Utho = require('../src/index');
+const utho = new Utho('YOUR_API_KEY');
 
-async function main() {
-    const utho = Utho.create(apiKey);
-
-    console.log('--- Utho SDK Example ---');
-
+async function monolithicExample() {
     try {
-        // 1. Get Account Info
-        console.log('\n1. Fetching Account Info...');
+        console.log('--- Monolithic Usage ---');
         const accountInfo = await utho.account.getInfo();
-        console.log('Account Info:', JSON.stringify(accountInfo, null, 2));
-
-        // 2. List Cloud Servers
-        console.log('\n2. Listing Cloud Servers...');
-        const servers = await utho.cloudserver.list();
-        console.log('Servers:', JSON.stringify(servers, null, 2));
-
-        // 3. List ISOs
-        console.log('\n3. Listing ISOs...');
-        const isos = await utho.iso.list();
-        console.log('ISOs:', JSON.stringify(isos, null, 2));
-
+        console.log('Account Info:', accountInfo);
     } catch (error) {
-        console.error('Error:', error.message);
+        console.error('Monolithic error:', error.message);
     }
 }
 
-main();
+// --- Option 2: Modular Usage (Recommended) ---
+const Client = require('../packages/core/src/index');
+const AccountService = require('../packages/account/src/index');
+const CloudServerService = require('../packages/cloudserver/src/index');
+
+const client = new Client('YOUR_API_KEY');
+const account = new AccountService(client);
+const cloudserver = new CloudServerService(client);
+
+async function modularExample() {
+    try {
+        console.log('\n--- Modular Usage ---');
+
+        // 1. Get Account Info
+        const info = await account.getInfo();
+        console.log('Account Info:', info);
+
+        // 2. List Cloud Servers
+        const servers = await cloudserver.list();
+        console.log('Servers found:', servers.data?.length || 0);
+
+    } catch (error) {
+        console.error('Modular error:', error.message);
+    }
+}
+
+async function run() {
+    await monolithicExample();
+    await modularExample();
+}
+
+run();

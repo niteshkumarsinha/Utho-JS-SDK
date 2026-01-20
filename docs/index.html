@@ -99,14 +99,14 @@
 
             <div id="installation" class="content-section">
                 <h1>Installation</h1>
-                <p>Install the Utho SDK via your favorite package manager.</p>
+                <p>Install the full SDK or specific service packages via your favorite package manager.</p>
                 <div class="code-block">
-                    <div class="code-header">BASH</div>
+                    <div class="code-header">MONOLITHIC INSTALLATION</div>
                     <pre><code>npm install utho-sdk-js</code></pre>
                 </div>
-                <div class="code-block">
-                    <div class="code-header">YARN</div>
-                    <pre><code>yarn add utho-sdk-js</code></pre>
+                <div class="code-block" style="margin-top: 15px;">
+                    <div class="code-header">MODULAR INSTALLATION (RECOMMENDED)</div>
+                    <pre><code>npm install @utho/sdk-core @utho/sdk-objectstorage</code></pre>
                 </div>
             </div>
 
@@ -114,7 +114,7 @@
                 <h1>Quickstart</h1>
                 <p>Initialize the SDK and start making requests in seconds.</p>
                 <div class="code-block">
-                    <div class="code-header">JAVASCRIPT</div>
+                    <div class="code-header">MONOLITHIC USAGE</div>
                     <pre><code>const Utho = require('utho-sdk-js');
 
 const utho = new Utho('YOUR_API_KEY');
@@ -124,6 +124,20 @@ async function main() {
     console.log(servers);
 }
 
+main();</code></pre>
+                </div>
+                <div class="code-block" style="margin-top: 20px;">
+                    <div class="code-header">MODULAR USAGE (RECOMMENDED)</div>
+                    <pre><code>const Client = require('@utho/sdk-core');
+const ObjectStorage = require('@utho/sdk-objectstorage');
+
+const client = new Client('YOUR_API_KEY');
+const os = new ObjectStorage(client);
+
+async function main() {
+    const buckets = await os.listBuckets('in-mumbai-1');
+    console.log(buckets);
+}
 main();</code></pre>
                 </div>
             </div>
